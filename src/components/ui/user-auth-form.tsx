@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -11,8 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Icons } from "../icons";
 import { userAuthSchema } from "@/lib/validation/auth";
-import { useToast } from "@/hooks/use-toast";
 import { useLogin } from "@/hooks/auth.hook";
+import { useUser } from "@/context/user.provider";
+import { useEffect } from "react";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -28,13 +28,17 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
   });
   const router = useRouter();
   const { mutate: handleLogin, isPending, isSuccess } = useLogin();
+  const { setIsLoading } = useUser();
 
   async function onSubmit(data: FormData) {
     handleLogin(data);
   }
-  if (!isPending && isSuccess) {
-    router.push("/");
-  }
+  useEffect(() => {
+    if (!isPending && isSuccess) {
+      setIsLoading(true);
+      router.push("/");
+    }
+  }, [isPending, isSuccess]);
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
