@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import { Poppins, Nunito_Sans } from "next/font/google";
 import "./globals.css";
+import { Providers } from "@/providers";
 const poppins = Poppins({
   subsets: ["latin"],
   variable: "--font-popins",
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
-const ubuntu = Nunito_Sans({
+const nunito = Nunito_Sans({
   subsets: ["latin"],
-  variable: "--font-ubuntu",
+  variable: "--font-nunito",
   weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
@@ -25,9 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${ubuntu.variable} ${poppins.variable} font-ubuntu antialiased`}
+        className={`${nunito.variable} ${poppins.variable} font-nunito antialiased`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

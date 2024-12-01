@@ -58,7 +58,7 @@ export default {
       },
       fontFamily: {
         popins: ["var(--font-popins)"],
-        ubuntu: ["var(--font-ubuntu)"],
+        nunito: ["var(--font-nunito)"],
       },
     },
   },
