@@ -11,20 +11,14 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { useUser } from "@/context/user.provider";
-import { logout } from "@/services/authService";
 import Image from "next/image";
-import { LogoutIcon } from "../animateIcons/logout";
+import { AvatarDropdown } from "./AvatarDropdown";
 
 const routes = [{ name: "Home", path: "/" }];
 
 export function Navbar() {
   const pathname = usePathname();
-  const { user, setIsLoading } = useUser();
-  const handleLogout = () => {
-    logout();
-    setIsLoading(true);
-  };
-  console.log(user);
+  const { user } = useUser();
 
   return (
     <header className="border-b">
@@ -49,7 +43,7 @@ export function Navbar() {
               </NavigationMenuList>
             </NavigationMenu>
             {user ? (
-              <LogoutIcon onClick={handleLogout} />
+              <AvatarDropdown/>
             ) : (
               <Button asChild>
                 <Link href="/login">Login</Link>
