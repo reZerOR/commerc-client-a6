@@ -12,8 +12,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useHardUserDelete, useSoftDeleteUser } from "@/hooks/user.hook";
 
 export default function DeleteUserButton({ userId }: { userId: string }) {
+  const { mutate: hardDelete } = useHardUserDelete();
+  const { mutate: softDelete } = useSoftDeleteUser();
+  const handleSoftDelete = () => {
+    softDelete(userId);
+  };
+  const handleHardDelete = () => {
+    hardDelete(userId);
+  };
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -26,9 +35,16 @@ export default function DeleteUserButton({ userId }: { userId: string }) {
             This action cannot be undone. This will softly delete user.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
+        <AlertDialogFooter className="flex justify-between">
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <div className="space-x-2">
+            <AlertDialogAction onClick={handleSoftDelete}>
+              Soft
+            </AlertDialogAction>
+            <AlertDialogAction onClick={handleHardDelete}>
+              Hard
+            </AlertDialogAction>
+          </div>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

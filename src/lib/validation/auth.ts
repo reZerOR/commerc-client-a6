@@ -34,4 +34,19 @@ export const createUserSchema = z.object({
       "Phone number must start with 01 and be exactly 11 digits"
     ),
 });
+export const updateUserSchema = z.object({
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
+  role: z.enum(["USER", "ADMIN"]),
+  phoneNumber: z
+    .string()
+    .regex(
+      /^01\d{9}$/,
+      "Phone number must start with 01 and be exactly 11 digits"
+    ),
+});
 

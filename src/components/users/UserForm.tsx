@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -22,37 +21,72 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createUserSchema } from "@/lib/validation/auth";
-import { useCreateUser } from "@/hooks/user.hook";
+import { createUserSchema, updateUserSchema } from "@/lib/validation/auth";
+import { TUser, useCreateUser, useUpdateUser } from "@/hooks/user.hook";
+import { toast } from "sonner";
 
-export default function CreateUserForm({
-  setOpen,
-}: {
+type Props = {
   setOpen: React.Dispatch<boolean>;
-}) {
-  const router = useRouter();
+  user?: TUser | null;
+};
 
-  const form = useForm<z.infer<typeof createUserSchema>>({
-    resolver: zodResolver(createUserSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      role: "USER",
-      phoneNumber: "",
-    },
+export default function UserForm({ setOpen, user }: Props) {
+  const form = useForm<
+    z.infer<typeof createUserSchema | typeof updateUserSchema>
+  >({
+    resolver: zodResolver(!user ? createUserSchema : updateUserSchema),
+    defaultValues: user
+      ? {
+          name: user?.name || "",
+          email: user?.email || "",
+          role: user?.role || "USER",
+          phoneNumber: user?.phoneNumber || "",
+        }
+      : {
+          name: "",
+          email: "",
+          role: "USER",
+          password: "",
+          phoneNumber: "",
+        },
   });
-  const { mutate: handleCreateUser, isSuccess, isPending } = useCreateUser();
 
-  async function onSubmit(values: z.infer<typeof createUserSchema>) {
-    handleCreateUser(values);
+  const {
+    mutate: handleCreateUser,
+    isSuccess: isCreateSuccess,
+    isPending: isCreatePending,
+  } = useCreateUser();
+  const {
+    mutate: handleUpdateUser,
+    isSuccess: isUpdateSuccess,
+    isPending: isUpdatePending,
+  } = useUpdateUser();
+
+  async function onSubmit(
+    values: z.infer<typeof createUserSchema | typeof updateUserSchema>
+  ) {
+    if (user) {
+      console.log("hello");
+
+      handleUpdateUser({
+        id: user._id!,
+        payload: {
+          name: values.name,
+          phoneNumber: values.phoneNumber,
+          role: values.role,
+        },
+      });
+    } else {
+      handleCreateUser(values as TUser & { password: string });
+    }
   }
+
   useEffect(() => {
-    if (isSuccess) {
+    if (isCreateSuccess || isUpdateSuccess) {
       setOpen(false);
       form.reset();
     }
-  }, [isSuccess]);
+  }, [isCreateSuccess, isUpdateSuccess]);
 
   return (
     <Form {...form}>
@@ -77,25 +111,32 @@ export default function CreateUserForm({
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="john@example.com" {...field} />
+                <Input
+                  type="email"
+                  readOnly={!!user}
+                  placeholder="john@example.com"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="******" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {!user && ( // Only show password field when creating a new user
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="******" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <FormField
           control={form.control}
           name="role"
@@ -131,8 +172,16 @@ export default function CreateUserForm({
           )}
         />
         <div className="flex justify-end">
-          <Button type="submit" className="mt-4" disabled={isPending}>
-            {isPending ? "Creating..." : "Create User"}
+          <Button
+            type="submit"
+            className="mt-4"
+            disabled={isCreatePending || isUpdatePending}
+          >
+            {isCreatePending || isUpdatePending
+              ? "Submitting..."
+              : user
+              ? "Update"
+              : "Create"}
           </Button>
         </div>
       </form>

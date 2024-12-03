@@ -9,9 +9,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import CreateUserForm from "./CreateUserForm";
 import UsersTable from "./UsersTable";
 import { useState } from "react";
+import UserForm from "./UserForm";
 
 export default function UserList() {
   const [open, setOpen] = useState(false);
@@ -32,7 +32,7 @@ export default function UserList() {
                 Make changes to your profile here. Click save when you're done.
               </DialogDescription>
             </DialogHeader>
-            <CreateUserForm setOpen={setOpen}/>
+            <UserForm setOpen={setOpen}/>
           </DialogContent>
         </Dialog>
       </div>

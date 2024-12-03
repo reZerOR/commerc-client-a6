@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { useGetUsers } from "@/hooks/user.hook";
 import { Edit } from "lucide-react";
+import EditUserForm from "./EditUser";
 
 const UsersTable = () => {
   const { data: users, isLoading } = useGetUsers();
@@ -37,12 +38,7 @@ const UsersTable = () => {
             <TableCell className="hidden md:table-cell">{user.email}</TableCell>
             <TableCell>{user.role}</TableCell>
             <TableCell className="flex">
-              <Link
-                href={`/users/${user._id}`}
-                className="text-blue-600 hover:text-blue-800 mr-2"
-              >
-                <Edit />
-              </Link>
+              <EditUserForm user={user} />
               <DeleteUserButton userId={user._id!} />
             </TableCell>
           </TableRow>
