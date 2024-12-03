@@ -6,10 +6,10 @@ import {
   Home,
   LucideIcon,
   CalendarCheck,
-  LayoutList,
-  User,
   LayoutDashboard,
   Users,
+  Bookmark,
+  Package,
 } from "lucide-react";
 import { useUser } from "@/context/user.provider";
 import Link from "next/link";
@@ -22,8 +22,8 @@ const userNavs = [
 
 const adminNavs = [
   { Icon: LayoutDashboard, title: "Dashboard", path: "/admin" },
-  { Icon: CalendarCheck, title: "Bookings", path: "/dashboard/bookings" },
-  { Icon: LayoutList, title: "Facilities", path: "/dashboard/facilities" },
+  { Icon: Package, title: "Products", path: "/dashboard/bookings" },
+  { Icon: Bookmark, title: "Categories", path: "/dashboard/categories" },
   { Icon: Users, title: "Users", path: "/dashboard/users" },
 ];
 
