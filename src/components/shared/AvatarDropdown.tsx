@@ -73,7 +73,7 @@ export function AvatarDropdown() {
         <DropdownMenuItem asChild className="cursor-pointer">
           <Link
             href={
-              user?.role === "ADMIN" ? "/admin-dashboard" : "/user-dashboard"
+              user?.role === "ADMIN" ? "/dashboard" : "/dashboard"
             }
           >
             <LayoutDashboard className="mr-2 h-4 w-4" />

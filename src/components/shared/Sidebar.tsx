@@ -9,6 +9,7 @@ import {
   LayoutList,
   User,
   LayoutDashboard,
+  Users,
 } from "lucide-react";
 import { useUser } from "@/context/user.provider";
 import Link from "next/link";
@@ -23,7 +24,7 @@ const adminNavs = [
   { Icon: LayoutDashboard, title: "Dashboard", path: "/admin" },
   { Icon: CalendarCheck, title: "Bookings", path: "/dashboard/bookings" },
   { Icon: LayoutList, title: "Facilities", path: "/dashboard/facilities" },
-  { Icon: User, title: "Add Admin", path: "/dashboard/add-admin" },
+  { Icon: Users, title: "Users", path: "/dashboard/users" },
 ];
 
 export default function Sidebar() {
