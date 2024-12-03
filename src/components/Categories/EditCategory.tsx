@@ -22,7 +22,7 @@ const EditCategory = ({ ...category }: TCategory) => {
         <DialogHeader>
           <DialogTitle>Add Category</DialogTitle>
         </DialogHeader>
-        <CategoryForm setIsOpen={setIsOpen} category={category} />
+        <CategoryForm onClose={() => setIsOpen(false)} category={category} />
       </DialogContent>
     </Dialog>
   );

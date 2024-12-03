@@ -8,9 +8,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
 import EditCategory from "./EditCategory";
 import DeleteCategory from "./DeleteCategory";
+import { useGetCategory } from "@/hooks/category.hook";
 export interface TCategory {
   _id: string;
   name: string;
@@ -18,23 +18,12 @@ export interface TCategory {
   createdAt: Date;
   updatedAt: Date;
 }
-const CategoryTable = () => {
-  const [categories, setCategories] = useState<TCategory[]>([
-    {
-      _id: "1",
-      name: "Electronics",
-      isDeleted: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      _id: "2",
-      name: "Books",
-      isDeleted: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ]);
+export default function CategoryTable() {
+  const { data: categories, isLoading } = useGetCategory();
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  console.log(categories);
   return (
     <Table>
       <TableHeader>
@@ -46,11 +35,15 @@ const CategoryTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {categories.map((category) => (
+        {categories?.map((category) => (
           <TableRow key={category._id}>
             <TableCell className="font-semibold">{category.name}</TableCell>
-            <TableCell>{category.createdAt.toLocaleDateString()}</TableCell>
-            <TableCell>{category.updatedAt.toLocaleDateString()}</TableCell>
+            <TableCell>
+              {new Date(category.createdAt).toLocaleDateString()}
+            </TableCell>
+            <TableCell>
+              {new Date(category.updatedAt).toLocaleDateString()}
+            </TableCell>
             <TableCell className="flex gap-2">
               <EditCategory {...category} />
               <DeleteCategory id={category._id} />
@@ -60,6 +53,4 @@ const CategoryTable = () => {
       </TableBody>
     </Table>
   );
-};
-
-export default CategoryTable;
+}

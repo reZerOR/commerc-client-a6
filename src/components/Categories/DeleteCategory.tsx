@@ -10,8 +10,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useCategoryDelete } from "@/hooks/category.hook";
 import { Trash } from "lucide-react";
 const DeleteCategory = ({ id }: { id: string }) => {
+  const { mutate: categoryDelete } = useCategoryDelete();
+  const handleDelete = () => {
+    categoryDelete(id);
+  };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -27,7 +33,7 @@ const DeleteCategory = ({ id }: { id: string }) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Delete</AlertDialogAction>
+          <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

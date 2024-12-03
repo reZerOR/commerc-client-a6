@@ -23,7 +23,7 @@ const AddCategory = () => {
         <DialogHeader>
           <DialogTitle>Add Category</DialogTitle>
         </DialogHeader>
-        <CategoryForm setIsOpen={setIsOpen} />
+        <CategoryForm onClose={() => setIsOpen(false)} />
       </DialogContent>
     </Dialog>
   );
