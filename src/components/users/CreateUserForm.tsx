@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,29 +22,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { createUserSchema } from "@/lib/validation/auth";
+import { useCreateUser } from "@/hooks/user.hook";
 
-const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  password: z.string().min(6, {
-    message: "Password must be at least 6 characters.",
-  }),
-  role: z.enum(["USER", "ADMIN"]),
-  phoneNumber: z.string().min(10, {
-    message: "Phone number must be at least 10 characters.",
-  }),
-});
-
-export default function CreateUserForm() {
+export default function CreateUserForm({
+  setOpen,
+}: {
+  setOpen: React.Dispatch<boolean>;
+}) {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof createUserSchema>>({
+    resolver: zodResolver(createUserSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -53,26 +42,17 @@ export default function CreateUserForm() {
       phoneNumber: "",
     },
   });
+  const { mutate: handleCreateUser, isSuccess, isPending } = useCreateUser();
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true);
-    try {
-      const response = await fetch("/api/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
-      if (response.ok) {
-        router.refresh();
-        form.reset();
-      } else {
-        console.error("Failed to create user");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-    setIsSubmitting(false);
+  async function onSubmit(values: z.infer<typeof createUserSchema>) {
+    handleCreateUser(values);
   }
+  useEffect(() => {
+    if (isSuccess) {
+      setOpen(false);
+      form.reset();
+    }
+  }, [isSuccess]);
 
   return (
     <Form {...form}>
@@ -151,8 +131,8 @@ export default function CreateUserForm() {
           )}
         />
         <div className="flex justify-end">
-          <Button type="submit" className="mt-4" disabled={isSubmitting}>
-            {isSubmitting ? "Creating..." : "Create User"}
+          <Button type="submit" className="mt-4" disabled={isPending}>
+            {isPending ? "Creating..." : "Create User"}
           </Button>
         </div>
       </form>

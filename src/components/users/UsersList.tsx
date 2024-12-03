@@ -1,5 +1,6 @@
+"use client";
 import { Button } from "../ui/button";
-import { Plus, User } from "lucide-react";
+import { Plus } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -10,15 +11,15 @@ import {
 } from "../ui/dialog";
 import CreateUserForm from "./CreateUserForm";
 import UsersTable from "./UsersTable";
+import { useState } from "react";
 
-export default async function UserList() {
-  //   const users = await UserModel.find({ isDeleted: false }).select('-password')
-
+export default function UserList() {
+  const [open, setOpen] = useState(false);
   return (
-    <div className="mt-8">
+    <div className="mt-8 flex-1">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold mb-4">User List</h2>
-        <Dialog>
+        <Dialog onOpenChange={setOpen} open={open}>
           <DialogTrigger asChild>
             <Button>
               <Plus /> Add
@@ -31,7 +32,7 @@ export default async function UserList() {
                 Make changes to your profile here. Click save when you're done.
               </DialogDescription>
             </DialogHeader>
-            <CreateUserForm />
+            <CreateUserForm setOpen={setOpen}/>
           </DialogContent>
         </Dialog>
       </div>

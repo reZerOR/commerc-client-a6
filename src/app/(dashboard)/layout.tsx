@@ -5,7 +5,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <main className="flex">
       <Sidebar />
-      <div className="flex-1">
+      <div className="flex-grow">
       {children}
       </div>
     </main>

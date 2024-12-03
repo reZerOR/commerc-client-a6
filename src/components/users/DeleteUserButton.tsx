@@ -1,41 +1,36 @@
-'use client'
+"use client";
+import { Trash } from "lucide-react";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Button } from "@/components/ui/button"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function DeleteUserButton({ userId }: { userId: string }) {
-  const [isDeleting, setIsDeleting] = useState(false)
-  const router = useRouter()
-
-  const handleDelete = async () => {
-    if (confirm('Are you sure you want to delete this user?')) {
-      setIsDeleting(true)
-      try {
-        const response = await fetch(`/api/users/${userId}`, {
-          method: 'DELETE',
-        })
-        if (response.ok) {
-          router.refresh()
-        } else {
-          console.error('Failed to delete user')
-        }
-      } catch (error) {
-        console.error('Error:', error)
-      }
-      setIsDeleting(false)
-    }
-  }
-
   return (
-    <Button
-      onClick={handleDelete}
-      disabled={isDeleting}
-      variant="destructive"
-      size="sm"
-    >
-      {isDeleting ? 'Deleting...' : 'Delete'}
-    </Button>
-  )
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Trash className="text-red-500 cursor-pointer" />
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will softly delete user.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction>Continue</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
 }
-
