@@ -1,6 +1,7 @@
 import { TCategory } from "@/components/Categories/CategoryTable";
 import {
   createProduct,
+  deleteProduct,
   getProduct,
   updateProduct,
 } from "@/services/ItemService";
@@ -27,10 +28,18 @@ export type TItem = {
   items: TProduct[];
 };
 
-export const useGetProduct = () => {
+export const useGetProduct = (
+  page: string,
+  searchTerm: string,
+  category: string
+) => {
+  const params: Record<string, string> = {};
+  if (page) params.page = page;
+  if (searchTerm) params.searchTerm = searchTerm;
+  if (category) params.category = category;
   return useQuery<TItem>({
-    queryKey: ["products"],
-    queryFn: async () => await getProduct(),
+    queryKey: ["products", page, searchTerm, category],
+    queryFn: async () => await getProduct(params),
   });
 };
 
@@ -60,6 +69,21 @@ export const useUpdateProduct = () => {
       id: string;
       payload: Omit<TProduct, "image" | "_id">;
     }) => await updateProduct(id, payload),
+    onSuccess: () => {
+      toast.success("Product updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ["delete_prodcut"],
+    mutationFn: async (id: string) => await deleteProduct(id),
     onSuccess: () => {
       toast.success("Product updated successfully");
       queryClient.invalidateQueries({ queryKey: ["products"] });

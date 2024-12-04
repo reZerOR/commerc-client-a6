@@ -1,3 +1,4 @@
+"use client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,8 +10,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useDeleteProduct } from "@/hooks/product.hook";
 import { Trash } from "lucide-react";
-const DeleteProduct = () => {
+const DeleteProduct = ({ id }: { id: string }) => {
+  const { mutate: productDelete } = useDeleteProduct();
+  const handleDelete = () => {
+    productDelete(id);
+  };
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -26,7 +32,7 @@ const DeleteProduct = () => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Delete</AlertDialogAction>
+          <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

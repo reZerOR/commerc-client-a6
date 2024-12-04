@@ -3,9 +3,9 @@
 import { TItem, TProduct } from "@/hooks/product.hook";
 import axiosInstance from "@/lib/axiosInstance";
 
-export const getProduct = async () => {
+export const getProduct = async (params: Record<string, string>) => {
   try {
-    const { data } = await axiosInstance.get("/item");
+    const { data } = await axiosInstance.get("/item", {params});
     return data.data;
   } catch (error: any) {
     throw new Error(error.message);
@@ -32,6 +32,16 @@ export const updateProduct = async (
 ) => {
   try {
     const { data } = await axiosInstance.put(`/item/${id}`, payload);
+    data.data;
+  } catch (error: any) {
+    console.log(error);
+
+    throw new Error(error.message);
+  }
+};
+export const deleteProduct = async (id: string) => {
+  try {
+    const { data } = await axiosInstance.delete(`/item/${id}`);
     data.data;
   } catch (error: any) {
     console.log(error);
