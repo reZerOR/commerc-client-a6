@@ -11,6 +11,7 @@ import { useGetProduct } from "@/hooks/product.hook";
 import Image from "next/image";
 import EditProduct from "./EditProduct";
 import DeleteProduct from "./DeleteProduct";
+import { TCategory } from "../Categories/CategoryTable";
 
 const ProductTable = () => {
   const { data: products, isLoading } = useGetProduct();
@@ -42,10 +43,10 @@ const ProductTable = () => {
             <TableCell>{product.title}</TableCell>
             <TableCell>{product.price.toFixed(2)}</TableCell>
             <TableCell>{product.quantity}</TableCell>
-            <TableCell>{product.category.name}</TableCell>
+            <TableCell>{(product.category as TCategory).name}</TableCell>
             <TableCell>
               <div className="flex space-x-2">
-                <EditProduct />
+                <EditProduct {...product} />
                 <DeleteProduct />
               </div>
             </TableCell>

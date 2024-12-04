@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import {
   Dialog,
   DialogContent,
@@ -8,7 +8,9 @@ import {
 } from "@/components/ui/dialog";
 import { Edit } from "lucide-react";
 import { useState } from "react";
-const EditProduct = () => {
+import ProductForm from "./ProductForm";
+import { TProduct } from "@/hooks/product.hook";
+const EditProduct = (prodcut: TProduct) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -18,9 +20,9 @@ const EditProduct = () => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Category</DialogTitle>
+          <DialogTitle>Edit Product</DialogTitle>
         </DialogHeader>
-        {/* <CategoryForm onClose={() => setIsOpen(false)} category={category} /> */}
+        <ProductForm onClose={() => setIsOpen(false)} product={prodcut} />
       </DialogContent>
     </Dialog>
   );
