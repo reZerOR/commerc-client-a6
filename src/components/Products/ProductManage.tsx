@@ -1,4 +1,5 @@
 import AddProduct from "./AddProduct";
+import ProductTable from "./ProductTable";
 
 export default function ProductManagement() {
   return (
@@ -7,7 +8,7 @@ export default function ProductManagement() {
         <h1 className="text-2xl">Product List</h1>
         <AddProduct />
       </div>
-      {/* <CategoryTable /> */}
+      <ProductTable />
     </div>
   );
 }
