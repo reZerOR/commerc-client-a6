@@ -32,6 +32,7 @@ export const useCreateCategory = () => {
     },
   });
 };
+
 export const useCategoryUpdate = () => {
   const queryClient = useQueryClient();
 
@@ -45,11 +46,11 @@ export const useCategoryUpdate = () => {
     },
     onError: (error) => {
       console.log(error);
-
       toast.error(error.message);
     },
   });
 };
+
 export const useCategoryDelete = () => {
   const queryClient = useQueryClient();
 

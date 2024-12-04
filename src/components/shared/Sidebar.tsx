@@ -22,7 +22,7 @@ const userNavs = [
 
 const adminNavs = [
   { Icon: LayoutDashboard, title: "Dashboard", path: "/admin" },
-  { Icon: Package, title: "Products", path: "/dashboard/bookings" },
+  { Icon: Package, title: "Products", path: "/dashboard/products" },
   { Icon: Bookmark, title: "Categories", path: "/dashboard/categories" },
   { Icon: Users, title: "Users", path: "/dashboard/users" },
 ];
