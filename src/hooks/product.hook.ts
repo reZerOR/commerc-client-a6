@@ -67,7 +67,7 @@ export const useUpdateProduct = () => {
       payload,
     }: {
       id: string;
-      payload: Omit<TProduct, "image" | "_id">;
+      payload: FormData
     }) => await updateProduct(id, payload),
     onSuccess: () => {
       toast.success("Product updated successfully");

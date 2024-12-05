@@ -53,26 +53,23 @@ export default function ProductForm({ onClose, product }: TProductProps) {
     maxSize: 1024 * 1024 * 4,
     multiple: false,
   };
-  const form = useForm<
-    z.infer<typeof productSchema | typeof productUpdateSchema>
-  >({
-    resolver: zodResolver(!product ? productSchema : productUpdateSchema),
-    defaultValues: !product
-      ? {
-          title: "",
-          price: "",
-          quantity: "",
-          description: "",
-          category: "",
-          image: "",
-        }
-      : {
-          title: product?.title || "",
-          price: product?.price.toString() || "",
-          quantity: product?.quantity.toString() || "",
-          description: product?.description || "",
-          category: (product?.category as TCategory)._id || "",
-        },
+  const form = useForm<z.infer<typeof productSchema>>({
+    resolver: zodResolver(productSchema),
+    defaultValues: {
+      title: product?.title || "",
+      price: product?.price.toString() || "",
+      quantity: product?.quantity.toString() || "",
+      description: product?.description || "",
+      category: (product?.category as TCategory)._id || "",
+      image: "",
+    },
+    // : {
+    //     title: product?.title || "",
+    //     price: product?.price.toString() || "",
+    //     quantity: product?.quantity.toString() || "",
+    //     description: product?.description || "",
+    //     category: (product?.category as TCategory)._id || "",
+    //   },
   });
   const {
     mutate: handleCreate,
@@ -85,9 +82,9 @@ export default function ProductForm({ onClose, product }: TProductProps) {
     isPending: isUpdatePending,
   } = useUpdateProduct();
 
-  function onSubmit(
-    values: z.infer<typeof productSchema | typeof productUpdateSchema>
-  ) {
+  function onSubmit(values: z.infer<typeof productSchema>) {
+    const formData = new FormData();
+
     const ProductData = {
       title: values.title,
       category: values.category,
@@ -95,13 +92,19 @@ export default function ProductForm({ onClose, product }: TProductProps) {
       price: Number(values.price),
       quantity: Number(values.quantity),
     };
+    formData.append("data", JSON.stringify(ProductData));
     if (product) {
-      handleUpdate({ id: product._id, payload: ProductData });
+      if (files?.length) {
+        formData.append("file", files![0]);
+      }
+      handleUpdate({ id: product._id, payload: formData });
     } else {
-      const formData = new FormData();
-      formData.append("data", JSON.stringify(ProductData));
-      formData.append("file", files![0]);
-      handleCreate(formData);
+      if (files?.length) {
+        formData.append("file", files![0]);
+        handleCreate(formData);
+      } else {
+        toast.warning("Please Select a image");
+      }
     }
   }
   useEffect(() => {
@@ -216,53 +219,53 @@ export default function ProductForm({ onClose, product }: TProductProps) {
           )}
         />
 
-        {!product && (
-          <FormField
-            control={form.control}
-            name="image"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Image</FormLabel>
-                <FormControl>
-                  <FileUploader
-                    value={files}
-                    onValueChange={setFiles}
-                    dropzoneOptions={dropZoneConfig}
-                    className="relative bg-background rounded-lg p-2"
+        {/* {!product && ( */}
+        <FormField
+          control={form.control}
+          name="image"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Image</FormLabel>
+              <FormControl>
+                <FileUploader
+                  value={files}
+                  onValueChange={setFiles}
+                  dropzoneOptions={dropZoneConfig}
+                  className="relative bg-background rounded-lg p-2"
+                >
+                  <FileInput
+                    id="fileInput"
+                    className="outline-dashed outline-1 outline-slate-500"
                   >
-                    <FileInput
-                      id="fileInput"
-                      className="outline-dashed outline-1 outline-slate-500"
-                    >
-                      <div className="flex items-center justify-center flex-col p-8 w-full ">
-                        <CloudUpload className="text-gray-500 w-10 h-10" />
-                        <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
-                          <span className="font-semibold">Click to upload</span>
-                          &nbsp; or drag and drop
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          SVG, PNG, JPG or GIF
-                        </p>
-                      </div>
-                    </FileInput>
-                    <FileUploaderContent>
-                      {files &&
-                        files.length > 0 &&
-                        files.map((file, i) => (
-                          <FileUploaderItem key={i} index={i}>
-                            <Paperclip className="h-4 w-4 stroke-current" />
-                            <span>{file.name}</span>
-                          </FileUploaderItem>
-                        ))}
-                    </FileUploaderContent>
-                  </FileUploader>
-                </FormControl>
+                    <div className="flex items-center justify-center flex-col p-8 w-full ">
+                      <CloudUpload className="text-gray-500 w-10 h-10" />
+                      <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
+                        <span className="font-semibold">Click to upload</span>
+                        &nbsp; or drag and drop
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        SVG, PNG, JPG or GIF
+                      </p>
+                    </div>
+                  </FileInput>
+                  <FileUploaderContent>
+                    {files &&
+                      files.length > 0 &&
+                      files.map((file, i) => (
+                        <FileUploaderItem key={i} index={i}>
+                          <Paperclip className="h-4 w-4 stroke-current" />
+                          <span>{file.name}</span>
+                        </FileUploaderItem>
+                      ))}
+                  </FileUploaderContent>
+                </FileUploader>
+              </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* // )} */}
         <Button type="submit" disabled={isCreatePending || isUpdatePending}>
           Submit
         </Button>

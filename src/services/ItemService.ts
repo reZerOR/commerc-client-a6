@@ -28,10 +28,14 @@ export const createProduct = async (formData: FormData) => {
 };
 export const updateProduct = async (
   id: string,
-  payload: Omit<TProduct, "image" | "_id">
+  payload:FormData
 ) => {
   try {
-    const { data } = await axiosInstance.put(`/item/${id}`, payload);
+    const { data } = await axiosInstance.put(`/item/${id}`, payload, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     data.data;
   } catch (error: any) {
     console.log(error);
