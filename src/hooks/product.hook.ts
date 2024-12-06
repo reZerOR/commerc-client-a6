@@ -31,14 +31,16 @@ export type TItem = {
 export const useGetProduct = (
   page: string,
   searchTerm: string,
-  category: string
+  category: string,
+  sort: string
 ) => {
   const params: Record<string, string> = {};
   if (page) params.page = page;
   if (searchTerm) params.searchTerm = searchTerm;
   if (category) params.category = category;
+  if (sort) params.sortBy = sort;
   return useQuery<TItem>({
-    queryKey: ["products", page, searchTerm, category],
+    queryKey: ["products", page, searchTerm, category, sort],
     queryFn: async () => await getProduct(params),
   });
 };

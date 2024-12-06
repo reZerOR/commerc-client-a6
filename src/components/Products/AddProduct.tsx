@@ -23,7 +23,6 @@ const AddProduct = () => {
         <DialogHeader>
           <DialogTitle>Add Category</DialogTitle>
         </DialogHeader>
-        {/* <CategoryForm onClose={() => setIsOpen(false)} /> */}
         <ProductForm onClose={()=>setIsOpen(false)}/>
       </DialogContent>
     </Dialog>

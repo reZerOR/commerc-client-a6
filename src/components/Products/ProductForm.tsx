@@ -60,7 +60,7 @@ export default function ProductForm({ onClose, product }: TProductProps) {
       price: product?.price.toString() || "",
       quantity: product?.quantity.toString() || "",
       description: product?.description || "",
-      category: (product?.category as TCategory)._id || "",
+      category: (product?.category as TCategory)?._id || "",
       image: "",
     },
     // : {
