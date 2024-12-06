@@ -3,6 +3,7 @@ import {
   createProduct,
   deleteProduct,
   getProduct,
+  getProductById,
   updateProduct,
 } from "@/services/ItemService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -42,6 +43,13 @@ export const useGetProduct = (
   return useQuery<TItem>({
     queryKey: ["products", page, searchTerm, category, sort],
     queryFn: async () => await getProduct(params),
+  });
+};
+
+export const useGetProductById = (id: string) => {
+  return useQuery<TProduct>({
+    queryKey: [id],
+    queryFn: async () => await getProductById(id),
   });
 };
 
