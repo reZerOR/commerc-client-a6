@@ -43,7 +43,7 @@ export function Navbar() {
               </NavigationMenuList>
             </NavigationMenu>
             {user ? (
-              <AvatarDropdown/>
+              <AvatarDropdown />
             ) : (
               <Button asChild>
                 <Link href="/login">Login</Link>

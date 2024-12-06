@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -16,18 +17,22 @@ import {
   ShoppingBag,
   LayoutDashboard,
   User,
+  ShoppingCart,
 } from "lucide-react";
 import { useUser } from "@/context/user.provider";
 import { logout } from "@/services/authService";
 import { LogoutIcon } from "../animateIcons/logout";
+import useCartStore from "@/store/useCartStore";
 
 export function AvatarDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const { user, setIsLoading } = useUser();
+  const { items } = useCartStore();
   const handleLogout = () => {
     logout();
     setIsLoading(true);
   };
+  const itemCount = items.reduce((total, item) => total + item.userQuantity, 0);
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
@@ -40,6 +45,11 @@ export function AvatarDropdown() {
               <User />
             </AvatarFallback>
           </Avatar>
+          {itemCount > 0 && (
+            <div className="absolute size-6 -top-2 -right-3 bg-red-500 flex justify-center items-center rounded-full text-white">
+              {itemCount}
+            </div>
+          )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -59,6 +69,15 @@ export function AvatarDropdown() {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild className="cursor-pointer">
+          <Link href="/cart">
+            <ShoppingCart className="mr-2 h-4 w-4" />
+            <span>Cart</span>
+            {itemCount > 0 && (
+              <div className="size-2 bg-red-500 rounded-full"></div>
+            )}
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer">
           <Link
             href={
               user?.role === "ADMIN"
@@ -71,11 +90,7 @@ export function AvatarDropdown() {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild className="cursor-pointer">
-          <Link
-            href={
-              user?.role === "ADMIN" ? "/dashboard" : "/dashboard"
-            }
-          >
+          <Link href={user?.role === "ADMIN" ? "/dashboard" : "/dashboard"}>
             <LayoutDashboard className="mr-2 h-4 w-4" />
             <span>Dashboard</span>
           </Link>

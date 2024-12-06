@@ -64,13 +64,8 @@ export const useUpdateProduct = () => {
 
   return useMutation({
     mutationKey: ["update_prodcut"],
-    mutationFn: async ({
-      id,
-      payload,
-    }: {
-      id: string;
-      payload: FormData
-    }) => await updateProduct(id, payload),
+    mutationFn: async ({ id, payload }: { id: string; payload: FormData }) =>
+      await updateProduct(id, payload),
     onSuccess: () => {
       toast.success("Product updated successfully");
       queryClient.invalidateQueries({ queryKey: ["products"] });
