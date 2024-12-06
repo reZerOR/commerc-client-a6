@@ -31,7 +31,7 @@ const ProductPagination = ({ total }: { total: number }) => {
 
   const totalPages = Math.ceil((total || 0) / limit);
   return (
-    <Pagination>
+    <Pagination className="my-4">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious

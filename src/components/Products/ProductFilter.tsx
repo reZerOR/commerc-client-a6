@@ -68,16 +68,16 @@ const ProductFilter = () => {
     router.push(`?${urlParams.toString()}`);
   };
   return (
-    <div className="flex flex-col md:flex-row gap-2">
+    <div className="flex flex-col md:flex-row gap-2 mb-4">
       <Input
         placeholder="Search products..."
         value={searchInput}
         onChange={handleSearchChange}
-        className="max-w-[335px]"
+        className="w-full md:max-w-[335px]"
       />
       <div className="flex gap-2 flex-grow">
         <Select value={category} onValueChange={handleCategoryChange}>
-          <SelectTrigger className="max-w-44">
+          <SelectTrigger className="w-full md:max-w-44">
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
           <SelectContent>
@@ -90,7 +90,7 @@ const ProductFilter = () => {
           </SelectContent>
         </Select>
         <Select value={sort} onValueChange={handleSortChange}>
-          <SelectTrigger className="max-w-44">
+          <SelectTrigger className="w-full md:max-w-44">
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
           <SelectContent>
