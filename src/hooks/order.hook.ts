@@ -1,5 +1,6 @@
-import { createOrder, TOrder } from "@/services/orderService";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createOrder, getUserOrderById, TOrder } from "@/services/orderService";
+import { getUserById } from "@/services/userServices";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export const useCreateOrder = () => {
@@ -16,3 +17,10 @@ export const useCreateOrder = () => {
     },
   });
 };
+
+export const useGetUserOrderById = (id: string) => {
+    return useQuery<TOrder>({
+      queryKey: [id],
+      queryFn: async () => await getUserOrderById(id),
+    });
+  };
