@@ -4,7 +4,7 @@ import { TProduct } from "./product.hook";
 import { TUser } from "./user.hook";
 
 export type TOrderItem = {
-  name: string;
+  name?: string;
   item: string | TProduct;
   quantity: number;
   price: number;
@@ -13,11 +13,11 @@ export type TOrder = {
   user?: string | TUser;
   items: TOrderItem[];
   totalPrice: number;
-  status: "pending" | "processing" | "completed" | "cancelled";
+  status?: "pending" | "processing" | "completed" | "cancelled";
   transactionId?: string;
-  paymentStatus: "unpaid" | "paid" | "failed";
+  paymentStatus?: "unpaid" | "paid" | "failed";
   shippingAddress: TOrderShippingAddress;
-  isDeleted: boolean;
+  isDeleted?: boolean;
   createdAt?: string;
   updatedAt?: string;
 };

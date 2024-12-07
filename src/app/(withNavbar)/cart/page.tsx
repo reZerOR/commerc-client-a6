@@ -1,9 +1,7 @@
 "use client";
-
-import { useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Minus, Plus, Trash, Trash2 } from "lucide-react";
+import { Minus, Plus, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import useCartStore from "@/store/useCartStore";
-import { it } from "node:test";
+import Link from "next/link";
 
 export default function CartPage() {
   const router = useRouter();
@@ -39,7 +37,7 @@ export default function CartPage() {
           Cart
         </h1>
         <Card>
-          <CardHeader></CardHeader>
+          <CardHeader>Cart summeryF</CardHeader>
           <CardContent>
             {items.length === 0 ? (
               <p>Your cart is empty.</p>
@@ -118,7 +116,9 @@ export default function CartPage() {
               <Button variant="outline" onClick={clearCart} className="mr-2">
                 Clear Cart
               </Button>
-              <Button>Checkout</Button>
+              <Link href={'/checkout'}>
+                <Button>Checkout</Button>
+              </Link>
             </div>
           </CardFooter>
         </Card>

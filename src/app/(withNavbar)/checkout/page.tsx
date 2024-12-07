@@ -1,52 +1,98 @@
-'use client'
-
-import { useState } from 'react'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { useToast } from '@/hooks/use-toast'
-import { TOrderShippingAddress, useOrderSummary } from '@/hooks/useOrderSummery'
-import { useUser } from '@/context/user.provider'
+"use client";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import {
+  TOrderShippingAddress,
+  useOrderSummary,
+} from "@/hooks/useOrderSummery";
+import { useUser } from "@/context/user.provider";
+import { TOrder } from "@/services/orderService";
+import { useState } from "react";
 
 type CheckoutFormInputs = TOrderShippingAddress & {
   email: string;
   name: string;
-}
+};
+type TOrderResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    result: string;
+    payment_url: string;
+  };
+};
 
 export default function CheckoutPage() {
-  const router = useRouter()
-  const { toast } = useToast()
-  const {user} = useUser()
-  const orderSummary = useOrderSummary()
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const router = useRouter();
+  const { user } = useUser();
+  const orderSummary = useOrderSummary();
+  const [isPending, setIsPending] = useState(false);
 
-  const { register, handleSubmit, formState: { errors } } = useForm<CheckoutFormInputs>()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CheckoutFormInputs>();
 
   const onSubmit: SubmitHandler<CheckoutFormInputs> = async (data) => {
-    setIsSubmitting(true)
+    setIsPending(true);
+    const payload: TOrder = {
+      shippingAddress: {
+        city: data.city,
+        country: data.country,
+        zipCode: data.zipCode,
+        state: data.state,
+        street: data.street,
+      },
+      totalPrice: orderSummary.totalPrice!,
+      items: orderSummary.items!.map((i) => ({
+        item: i.item,
+        quantity: i.quantity,
+        price: i.price,
+      })),
+    };
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      toast({
-        title: "Order placed successfully!",
-        description: "You will receive a confirmation email shortly.",
-      })
-      
-      router.push('/order-confirmation')
+      const result = await fetch("http://localhost:5000/api/v1/order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            document.cookie
+              .split("; ")
+              .find((row) => row.startsWith("accessToken="))
+              ?.split("=")[1] || "",
+        },
+        credentials: "include", // Ensures cookies are sent with the request
+        body: JSON.stringify(payload),
+      });
+
+      if (!result.ok) {
+        throw new Error(`Error: ${result.status} ${result.statusText}`);
+      }
+
+      const response: TOrderResponse = await result.json();
+      console.log(response);
+
+      if (response.data.result === "true") {
+        // redirect(response.data.payment_url);
+        router.push(response.data.payment_url);
+      }
     } catch (error) {
-      toast({
-        title: "Error placing order",
-        description: "Please try again later.",
-        variant: "destructive",
-      })
-    } finally {
-      setIsSubmitting(false)
+      setIsPending(false);
+      console.log(error);
     }
-  }
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -61,49 +107,114 @@ export default function CheckoutPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Full Name</Label>
-                  <Input id="name" defaultValue={user?.name || ''} {...register("name", { required: "Name is required" })} />
-                  {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+                  <Input
+                    id="name"
+                    readOnly
+                    defaultValue={user?.name || ""}
+                    {...register("name", { required: "Name is required" })}
+                  />
+                  {errors.name && (
+                    <p className="text-red-500 text-sm">
+                      {errors.name.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" defaultValue={user?.email || ''} type="email" {...register("email", { required: "Email is required" })} />
-                  {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+                  <Input
+                    id="email"
+                    defaultValue={user?.email || ""}
+                    readOnly
+                    type="email"
+                    {...register("email", { required: "Email is required" })}
+                  />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="street">Street Address</Label>
-                <Input id="street" {...register("street", { required: "Street address is required" })} />
-                {errors.street && <p className="text-red-500 text-sm">{errors.street.message}</p>}
+                <Input
+                  id="street"
+                  {...register("street", {
+                    required: "Street address is required",
+                  })}
+                />
+                {errors.street && (
+                  <p className="text-red-500 text-sm">
+                    {errors.street.message}
+                  </p>
+                )}
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="city">City</Label>
-                  <Input id="city" {...register("city", { required: "City is required" })} />
-                  {errors.city && <p className="text-red-500 text-sm">{errors.city.message}</p>}
+                  <Input
+                    id="city"
+                    {...register("city", { required: "City is required" })}
+                  />
+                  {errors.city && (
+                    <p className="text-red-500 text-sm">
+                      {errors.city.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="state">State</Label>
-                  <Input id="state" {...register("state", { required: "State is required" })} />
-                  {errors.state && <p className="text-red-500 text-sm">{errors.state.message}</p>}
+                  <Input
+                    id="state"
+                    {...register("state", { required: "State is required" })}
+                  />
+                  {errors.state && (
+                    <p className="text-red-500 text-sm">
+                      {errors.state.message}
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="zipCode">Zip Code</Label>
-                  <Input id="zipCode" {...register("zipCode", { required: "Zip code is required" })} />
-                  {errors.zipCode && <p className="text-red-500 text-sm">{errors.zipCode.message}</p>}
+                  <Input
+                    id="zipCode"
+                    {...register("zipCode", {
+                      required: "Zip code is required",
+                    })}
+                  />
+                  {errors.zipCode && (
+                    <p className="text-red-500 text-sm">
+                      {errors.zipCode.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="country">Country</Label>
-                  <Input id="country" {...register("country", { required: "Country is required" })} />
-                  {errors.country && <p className="text-red-500 text-sm">{errors.country.message}</p>}
+                  <Input
+                    id="country"
+                    {...register("country", {
+                      required: "Country is required",
+                    })}
+                  />
+                  {errors.country && (
+                    <p className="text-red-500 text-sm">
+                      {errors.country.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </form>
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full" disabled={isSubmitting} onClick={handleSubmit(onSubmit)}>
-              {isSubmitting ? "Processing..." : "Place Order"}
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isPending}
+              onClick={handleSubmit(onSubmit)}
+            >
+              {isPending ? "Processing..." : "Place Order"}
             </Button>
           </CardFooter>
         </Card>
@@ -116,7 +227,9 @@ export default function CheckoutPage() {
             <ul className="space-y-2">
               {orderSummary.items?.map((item, index) => (
                 <li key={index} className="flex justify-between">
-                  <span>{item.name} x {item.quantity}</span>
+                  <span>
+                    {item.name} x {item.quantity}
+                  </span>
                   <span>Tk {(item.price * item.quantity).toFixed(2)}</span>
                 </li>
               ))}
@@ -130,6 +243,5 @@ export default function CheckoutPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
-
