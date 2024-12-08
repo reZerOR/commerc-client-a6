@@ -3,6 +3,7 @@ import { TProduct } from "@/hooks/product.hook";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -14,6 +15,7 @@ import Link from "next/link";
 import useCartStore from "@/store/useCartStore";
 import { useUser } from "@/context/user.provider";
 import { toast } from "sonner";
+import { TCategory } from "../Categories/CategoryTable";
 
 const ProductCard = ({ product }: { product: TProduct }) => {
   const { addItem } = useCartStore();
@@ -27,28 +29,36 @@ const ProductCard = ({ product }: { product: TProduct }) => {
   };
   return (
     <Card className="flex flex-col justify-end relative">
-      <CardHeader className="max-h-fit mb-4 mx-auto flex items-center">
-        <Image
-          src={product.image!}
-          height={200}
-          width={200}
-          alt="product image"
-          className="object-contain mx-auto"
-        />
-      </CardHeader>
+      <div className="p-2">
+        <CardHeader className="max-h-fit mx-auto flex items-center w-full bg-slate-200  rounded-lg">
+          <div className="">
+            <Image
+              src={product.image!}
+              height={200}
+              width={200}
+              alt="product image"
+              className="object-contain min-h-48 md:max-h-48 mx-auto"
+            />
+          </div>
+        </CardHeader>
+      </div>
       <CardContent className="">
         <CardTitle className="font-popins font-medium">
           {product.title}
         </CardTitle>
+        <CardDescription>
+          {(product.category as TCategory).name}
+        </CardDescription>
       </CardContent>
-      <CardFooter className=" flex gap-2 items-center">
+      <CardFooter className="flex gap-2 items-center">
         <Button
           onClick={handleAddCart}
-          className="w-full"
+          className="w-full group"
           variant={"default"}
           disabled={product.quantity <= 0}
         >
-          Add <ShoppingCartIcon />
+          Add{" "}
+          <ShoppingCartIcon className="group-hover:-rotate-12 transition-all duration-500" />
         </Button>
         <Link href={`/products/${product._id}`}>
           <Button variant={"ghost"} size={"icon"}>
