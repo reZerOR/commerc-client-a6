@@ -1,4 +1,5 @@
 import {
+  cancelOrder,
   createOrder,
   getAllOrder,
   getUserOrderById,
@@ -28,7 +29,26 @@ export const useCreateOrder = () => {
     mutationKey: ["create_order"],
     mutationFn: async (payload: TOrder) => await createOrder(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user_orders", 'all_orders'] });
+      queryClient.invalidateQueries({
+        queryKey: ["user_orders", "all_orders"],
+      });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+export const useCancelOrder = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ["cancel_order"],
+    mutationFn: async (id: string) => await cancelOrder(id),
+    onSuccess: () => {
+      toast.success("Order cancelled successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["all_orders"],
+      });
     },
     onError: (error) => {
       toast.error(error.message);

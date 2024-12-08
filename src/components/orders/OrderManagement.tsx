@@ -30,14 +30,19 @@ import {
 import { X, Eye } from "lucide-react";
 import { TUser } from "@/hooks/user.hook";
 import { TItem, TProduct } from "@/hooks/product.hook";
-import { useGetAllOrders } from "@/hooks/order.hook";
-import { useState } from "react";
+import { useCancelOrder, useGetAllOrders } from "@/hooks/order.hook";
+import { useEffect, useState } from "react";
 import { TOrder } from "@/services/orderService";
+import { toast } from "sonner";
 
 export default function OrderManagement() {
   const [open, setIsOpen] = useState(false);
-  const [dialogOrder, setDialogOrder]= useState<TOrder>()
+  const [alertOpen, setAlertOpen] = useState(false);
+
+  const [dialogOrder, setDialogOrder] = useState<TOrder>();
+  const [orderId, setOrderId] = useState("");
   const { data: orders, isLoading } = useGetAllOrders();
+  const { mutate: cancelOrder } = useCancelOrder();
   console.log(orders);
   if (isLoading) {
     return (
@@ -46,6 +51,10 @@ export default function OrderManagement() {
       </div>
     );
   }
+  const handleCancelOrder = () => {
+    cancelOrder(orderId);
+    setAlertOpen(false);
+  };
 
   return (
     <div className="py-10">
@@ -71,11 +80,15 @@ export default function OrderManagement() {
               <TableCell>{order.status}</TableCell>
               <TableCell>
                 <div className="flex md:flex-row flex-col items-center gap-2">
-                  <AlertDialog>
+                  <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
                     <AlertDialogTrigger asChild>
                       <Button
                         variant="outline"
                         size="icon"
+                        onClick={() => {
+                          setOrderId(order._id!);
+                          setAlertOpen(true);
+                        }}
                         disabled={order.status === "cancelled"}
                       >
                         <X />
@@ -91,9 +104,7 @@ export default function OrderManagement() {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => handleCancelOrder(order._id as string)}
-                        >
+                        <AlertDialogAction onClick={() => handleCancelOrder()}>
                           Confirm
                         </AlertDialogAction>
                       </AlertDialogFooter>

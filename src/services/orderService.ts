@@ -47,9 +47,18 @@ export const createOrder = async (payload: TOrder) => {
     throw new Error(error.message);
   }
 };
+
 export const getUserOrderById = async (id: string) => {
   try {
     const { data } = await axiosInstance.get(`/order/user/${id}`);
+    return data.data;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+export const cancelOrder = async (id: string) => {
+  try {
+    const { data } = await axiosInstance.delete(`/order/${id}`);
     return data.data;
   } catch (error: any) {
     throw new Error(error.message);
