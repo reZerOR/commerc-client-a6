@@ -76,7 +76,7 @@ export default function OrderManagement() {
                 {order._id}
               </TableCell>
               <TableCell>{(order.user as TUser).name}</TableCell>
-              <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
+              <TableCell>Tk {order.totalPrice.toFixed(2)}</TableCell>
               <TableCell>{order.status}</TableCell>
               <TableCell>
                 <div className="flex md:flex-row flex-col items-center gap-2">
@@ -135,12 +135,12 @@ export default function OrderManagement() {
                             {dialogOrder.items.map((item, index) => (
                               <li key={index}>
                                 {(item.item as TProduct).title} - Quantity:{" "}
-                                {item.quantity}, Price: ${item.price.toFixed(2)}
+                                {item.quantity}, Price: Tk {item.price.toFixed(2)}
                               </li>
                             ))}
                           </ul>
                           <p className="mt-2">
-                            <strong>Total Price:</strong> $
+                            <strong>Total Price:</strong> Tk {" "}
                             {dialogOrder.totalPrice.toFixed(2)}
                           </p>
                           <p>

@@ -11,6 +11,8 @@ import {
   Bookmark,
   Package,
   ShoppingBag,
+  HandCoinsIcon,
+  DollarSign,
 } from "lucide-react";
 import { useUser } from "@/context/user.provider";
 import Link from "next/link";
@@ -26,6 +28,7 @@ const adminNavs = [
   { Icon: Package, title: "Products", path: "/dashboard/products" },
   { Icon: Bookmark, title: "Categories", path: "/dashboard/categories" },
   { Icon: ShoppingBag, title: "Orders", path: "/dashboard/orders" },
+  { Icon: DollarSign, title: "Payments", path: "/dashboard/payments" },
   { Icon: Users, title: "Users", path: "/dashboard/users" },
 ];
 
