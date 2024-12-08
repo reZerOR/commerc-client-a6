@@ -1,5 +1,11 @@
 import ProductList from "@/components/Products/ProductList";
 import Container from "@/components/shared/Container";
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Spiralcom | Products",
+  description:
+    "Discover the best shopping experience with SpiralCom. Explore a wide range of products, fashion, home essentials, and more. Shop now and enjoy great deals and fast shipping!",
+};
 
 const Products = () => {
   return (

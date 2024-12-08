@@ -32,7 +32,7 @@ export default function CartPage() {
 
   return (
     <div className="container mx-auto p-4 ">
-      <div className="min-h-[calc(100vh-64px)]">
+      <div className="min-h-[calc(100vh-328px)]">
         <h1 className="text-center font-popins text-4xl font-semibold my-10">
           Cart
         </h1>

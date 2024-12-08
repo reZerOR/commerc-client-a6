@@ -12,12 +12,20 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useGetUserOrderById } from "@/hooks/order.hook";
+import useCartStore from "@/store/useCartStore";
+import { useEffect } from "react";
 
 export default function SuccessPage() {
   const searchParams = useSearchParams();
+  const { clearCart } = useCartStore();
   const orderId = searchParams.get("id");
   const { data: order, isLoading } = useGetUserOrderById(orderId!);
   console.log(order, isLoading);
+  useEffect(() => {
+    if (order) {
+      clearCart();
+    }
+  }, [order]);
 
   if (isLoading) {
     return (
@@ -26,7 +34,6 @@ export default function SuccessPage() {
       </div>
     );
   }
-
   return (
     <div className="container mx-auto px-4 py-8">
       <Card className="w-full max-w-2xl mx-auto">

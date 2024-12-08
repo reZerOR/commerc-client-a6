@@ -15,7 +15,7 @@ import Image from "next/image";
 import { AvatarDropdown } from "./AvatarDropdown";
 import Container from "./Container";
 
-const routes = [{ name: "Products", path: "/products" }];
+const routes = [{name: 'Home', path: '/'}, { name: "Products", path: "/products" }];
 
 export function Navbar() {
   const pathname = usePathname();

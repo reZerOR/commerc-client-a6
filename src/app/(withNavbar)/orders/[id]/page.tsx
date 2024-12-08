@@ -31,7 +31,7 @@ export default function OrderDetailsPage() {
     );
   }
   return (
-    <div className="container mx-auto mb-20">
+    <div className="container mx-auto mb-20 min-h-[calc(100vh-328px)]">
       <h1 className="text-3xl font-semibold font-popins text-center py-10 md:py-20">
         Order Details
       </h1>

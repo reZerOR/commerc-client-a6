@@ -23,14 +23,26 @@ import { useUser } from "@/context/user.provider";
 import { logout } from "@/services/authService";
 import { LogoutIcon } from "../animateIcons/logout";
 import useCartStore from "@/store/useCartStore";
+import { usePathname, useRouter } from "next/navigation";
 
+export const protectedRoutes = [
+  "/cart",
+  "/orders/:page*",
+  "/checkout"
+];
 export function AvatarDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const { user, setIsLoading } = useUser();
-  const { items } = useCartStore();
+  const router = useRouter();
+  const pathname = usePathname()
+  const { items, clearCart } = useCartStore();
   const handleLogout = () => {
     logout();
     setIsLoading(true);
+    clearCart()
+    if (protectedRoutes.some((route) => pathname.match(route))) {
+      router.push("/");
+    }
   };
   const itemCount = items.reduce((total, item) => total + item.userQuantity, 0);
   return (
