@@ -17,6 +17,7 @@ export type TOrderShippingAddress = {
 };
 
 export type TOrder = {
+  _id?: string;
   user?: string | TUser;
   items: TOrderItem[];
   totalPrice: number;
@@ -37,12 +38,19 @@ export const createOrder = async (payload: TOrder) => {
     throw new Error(error.message);
   }
 };
-export const getUserOrderById = async (id:string) => {
+export const getUserOrderById = async (id: string) => {
   try {
-    const { data } = await axiosInstance.get(`/order/${id}`);
+    const { data } = await axiosInstance.get(`/order/user/${id}`);
     return data.data;
   } catch (error: any) {
     throw new Error(error.message);
   }
 };
-
+export const getUserOrders = async () => {
+  try {
+    const { data } = await axiosInstance.get(`/order/user`);
+    return data.data;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};

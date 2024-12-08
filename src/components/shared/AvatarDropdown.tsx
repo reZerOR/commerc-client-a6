@@ -63,12 +63,6 @@ export function AvatarDropdown() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild className="cursor-pointer">
-          <Link href="/user-dashboard/profile">
-            <UserIcon className="mr-2 h-4 w-4" />
-            <span>Profile</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild className="cursor-pointer">
           <Link href="/cart">
             <ShoppingCart className="mr-2 h-4 w-4" />
             <span>Cart</span>
@@ -78,23 +72,19 @@ export function AvatarDropdown() {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild className="cursor-pointer">
-          <Link
-            href={
-              user?.role === "ADMIN"
-                ? "/admin-dashboard/orders"
-                : "/user-dashboard/orders"
-            }
-          >
+          <Link href={"/orders"}>
             <ShoppingBag className="mr-2 h-4 w-4" />
             <span>Orders</span>
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild className="cursor-pointer">
-          <Link href={user?.role === "ADMIN" ? "/dashboard" : "/dashboard"}>
-            <LayoutDashboard className="mr-2 h-4 w-4" />
-            <span>Dashboard</span>
-          </Link>
-        </DropdownMenuItem>
+        {user?.role === "ADMIN" && (
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href={user?.role === "ADMIN" ? "/dashboard" : "/dashboard"}>
+              <LayoutDashboard className="mr-2 h-4 w-4" />
+              <span>Dashboard</span>
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild onClick={handleLogout}>
           <LogoutIcon />

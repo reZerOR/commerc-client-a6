@@ -13,6 +13,8 @@ import { Label } from "@/components/ui/label";
 import { useCreateReview, useGetReviewByProduct } from "@/hooks/review.hook";
 import { create } from "zustand";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useUser } from "@/context/user.provider";
+import { toast } from "sonner";
 
 // Mock reviews data
 const initialReviews = [
@@ -39,6 +41,7 @@ const initialReviews = [
 const ProductsId = () => {
   const { id } = useParams();
   const { addItem } = useCartStore();
+  const { user } = useUser();
   const { data: product, isLoading } = useGetProductById(id as string);
   const { data: reviews, isLoading: isReviewLoading } = useGetReviewByProduct(
     id as string
@@ -57,14 +60,17 @@ const ProductsId = () => {
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(newReview);
-    createReview({
-      productId: id as string,
-      rating: newReview.rating,
-      message: newReview.comment,
-    });
+    if (!user) {
+      toast.error("You are not logged in");
+    } else {
+      createReview({
+        productId: id as string,
+        rating: newReview.rating,
+        message: newReview.comment,
+      });
 
-    setNewReview({ rating: 5, comment: "" });
+      setNewReview({ rating: 5, comment: "" });
+    }
   };
 
   if (isLoading || isReviewLoading) {
@@ -159,7 +165,9 @@ const ProductsId = () => {
                 required
               />
             </div>
-            <Button type="submit">Submit Review</Button>
+            <Button type="submit" disabled={!user}>
+              Submit Review
+            </Button>
           </div>
         </form>
 
