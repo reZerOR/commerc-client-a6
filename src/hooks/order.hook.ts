@@ -1,5 +1,6 @@
 import {
   createOrder,
+  getAllOrder,
   getUserOrderById,
   getUserOrders,
   TOrder,
@@ -13,6 +14,12 @@ export const useGetUserOrders = () => {
     queryFn: async () => await getUserOrders(),
   });
 };
+export const useGetAllOrders = () => {
+  return useQuery<TOrder[]>({
+    queryKey: ["all_orders"],
+    queryFn: async () => await getAllOrder(),
+  });
+};
 
 export const useCreateOrder = () => {
   const queryClient = useQueryClient();
@@ -21,7 +28,7 @@ export const useCreateOrder = () => {
     mutationKey: ["create_order"],
     mutationFn: async (payload: TOrder) => await createOrder(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user_orders"] });
+      queryClient.invalidateQueries({ queryKey: ["user_orders", 'all_orders'] });
     },
     onError: (error) => {
       toast.error(error.message);

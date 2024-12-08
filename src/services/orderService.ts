@@ -30,6 +30,15 @@ export type TOrder = {
   updatedAt?: Date;
 };
 
+export const getAllOrder = async()=>{
+  try {
+    const { data } = await axiosInstance.get(`/order`);
+    return data.data;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
+
 export const createOrder = async (payload: TOrder) => {
   try {
     const { data } = await axiosInstance.post("/order", payload);

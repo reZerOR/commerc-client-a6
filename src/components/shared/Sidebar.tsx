@@ -10,6 +10,7 @@ import {
   Users,
   Bookmark,
   Package,
+  ShoppingBag,
 } from "lucide-react";
 import { useUser } from "@/context/user.provider";
 import Link from "next/link";
@@ -24,6 +25,7 @@ const adminNavs = [
   { Icon: LayoutDashboard, title: "Dashboard", path: "/admin" },
   { Icon: Package, title: "Products", path: "/dashboard/products" },
   { Icon: Bookmark, title: "Categories", path: "/dashboard/categories" },
+  { Icon: ShoppingBag, title: "Orders", path: "/dashboard/orders" },
   { Icon: Users, title: "Users", path: "/dashboard/users" },
 ];
 
