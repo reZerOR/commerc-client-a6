@@ -26,7 +26,7 @@ export const useCreateCategory = () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
     },
     onError: (error) => {
-      console.log(error);
+      // console.log(error);
 
       toast.error(error.message);
     },
@@ -45,7 +45,7 @@ export const useCategoryUpdate = () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
     },
     onError: (error) => {
-      console.log(error);
+      // console.log(error);
       toast.error(error.message);
     },
   });
@@ -62,7 +62,7 @@ export const useCategoryDelete = () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
     },
     onError: (error) => {
-      console.log(error);
+      // console.log(error);
 
       toast.error(error.message);
     },

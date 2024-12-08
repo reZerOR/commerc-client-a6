@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 const Products = () => {
   return (
-    <Container>
+    <Container className="min-h-[calc(100vh-328px)]">
       <h1 className="text-center font-popins text-4xl font-semibold my-10">
         Products
       </h1>

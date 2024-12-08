@@ -15,8 +15,9 @@ import { TCategory } from "../Categories/CategoryTable";
 import { useSearchParams } from "next/navigation";
 import ProductFilter from "./ProductFilter";
 import ProductPagination from "./ProductPagination";
+import { Suspense } from "react";
 
-const ProductTable = () => {
+const ProductTableContent = () => {
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 10;
@@ -58,7 +59,9 @@ const ProductTable = () => {
                 </TableCell>
                 <TableCell>{product.title}</TableCell>
                 <TableCell>{product.price}</TableCell>
-                <TableCell className="hidden md:table-cell">{product.quantity}</TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {product.quantity}
+                </TableCell>
                 <TableCell>{(product.category as TCategory).name}</TableCell>
                 <TableCell>
                   <div className="flex space-x-2">
@@ -76,4 +79,10 @@ const ProductTable = () => {
   );
 };
 
-export default ProductTable;
+export default function ProductTable() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProductTableContent />
+    </Suspense>
+  );
+}

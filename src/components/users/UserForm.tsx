@@ -66,7 +66,7 @@ export default function UserForm({ setOpen, user }: Props) {
     values: z.infer<typeof createUserSchema | typeof updateUserSchema>
   ) {
     if (user) {
-      console.log("hello");
+      // console.log("hello");
 
       handleUpdateUser({
         id: user._id!,

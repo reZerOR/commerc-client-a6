@@ -225,7 +225,7 @@ export default function ProductForm({ onClose, product }: TProductProps) {
           name="image"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Image</FormLabel>
+              <FormLabel>Image (less then 1mb)</FormLabel>
               <FormControl>
                 <FileUploader
                   value={files}

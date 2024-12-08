@@ -23,7 +23,7 @@ export default function CategoryTable() {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  console.log(categories);
+  // // console.log(categories);
   return (
     <Table>
       <TableHeader>

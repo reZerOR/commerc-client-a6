@@ -9,11 +9,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useGetCategory } from "@/hooks/category.hook";
 import { useDebounce } from "@/hooks/useDebounce";
 
-const ProductFilter = () => {
+const ProductFilterContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const search = searchParams.get("searchTerm") || "";
@@ -107,4 +107,10 @@ const ProductFilter = () => {
   );
 };
 
-export default ProductFilter;
+export default function ProductFilter() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProductFilterContent />
+    </Suspense>
+  );
+}

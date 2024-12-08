@@ -43,7 +43,7 @@ export default function OrderManagement() {
   const [orderId, setOrderId] = useState("");
   const { data: orders, isLoading } = useGetAllOrders();
   const { mutate: cancelOrder } = useCancelOrder();
-  console.log(orders);
+  // // console.log(orders);
   if (isLoading) {
     return (
       <div className="h-dvh w-full flex items-center justify-center font-popins text-3xl font-semibold">

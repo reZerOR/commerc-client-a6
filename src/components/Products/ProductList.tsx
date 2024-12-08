@@ -4,8 +4,9 @@ import ProductFilter from "./ProductFilter";
 import ProductPagination from "./ProductPagination";
 import { useGetProduct } from "@/hooks/product.hook";
 import ProductCard from "./ProductCard";
+import { Suspense } from "react";
 
-const ProductList = () => {
+const ProductListContent = () => {
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 10;
@@ -18,6 +19,11 @@ const ProductList = () => {
     category === "all" ? "" : category,
     sort === "default" ? "" : sort
   );
+  if(!products?.items.length!){
+    return (
+      <div className="text-center flex items-center justify-center">No Product available</div>
+    )
+  }
   return (
     <div>
       <ProductFilter />
@@ -31,4 +37,10 @@ const ProductList = () => {
   );
 };
 
-export default ProductList;
+export default function ProductList() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProductListContent/>
+    </Suspense>
+  );
+}

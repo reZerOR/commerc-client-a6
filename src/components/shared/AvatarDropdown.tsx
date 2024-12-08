@@ -91,7 +91,7 @@ export function AvatarDropdown() {
         </DropdownMenuItem>
         {user?.role === "ADMIN" && (
           <DropdownMenuItem asChild className="cursor-pointer">
-            <Link href={user?.role === "ADMIN" ? "/dashboard" : "/dashboard"}>
+            <Link href={'/dashboard/products'}>
               <LayoutDashboard className="mr-2 h-4 w-4" />
               <span>Dashboard</span>
             </Link>

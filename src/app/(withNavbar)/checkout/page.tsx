@@ -83,7 +83,7 @@ export default function CheckoutPage() {
       }
 
       const response: TOrderResponse = await result.json();
-      console.log(response);
+      // // console.log(response);
 
       if (response.data.result === "true") {
         // redirect(response.data.payment_url);
@@ -91,7 +91,7 @@ export default function CheckoutPage() {
       }
     } catch (error) {
       setIsPending(false);
-      console.log(error);
+      // // console.log(error);
     }
   };
 

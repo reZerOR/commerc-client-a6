@@ -1,4 +1,5 @@
 "use client";
+
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
@@ -13,19 +14,19 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useGetUserOrderById } from "@/hooks/order.hook";
 import useCartStore from "@/store/useCartStore";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 
-export default function SuccessPage() {
+const SuccessPageContent = () => {
   const searchParams = useSearchParams();
   const { clearCart } = useCartStore();
   const orderId = searchParams.get("id");
   const { data: order, isLoading } = useGetUserOrderById(orderId!);
-  console.log(order, isLoading);
+
   useEffect(() => {
     if (order) {
       clearCart();
     }
-  }, [order]);
+  }, [order, clearCart]);
 
   if (isLoading) {
     return (
@@ -34,6 +35,15 @@ export default function SuccessPage() {
       </div>
     );
   }
+
+  if (!order) {
+    return (
+      <div className="h-dvh w-full flex items-center justify-center">
+        <p>Order not found. Please contact support.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <Card className="w-full max-w-2xl mx-auto">
@@ -49,7 +59,7 @@ export default function SuccessPage() {
           <div>
             <h3 className="font-semibold mb-2">Order Items:</h3>
             <ul className="list-disc list-inside">
-              {order?.items.map((item, index) => (
+              {order.items.map((item, index) => (
                 <li key={index}>
                   {typeof item.item === "string" ? item.item : item.item.title}{" "}
                   - Quantity: {item.quantity}, Price: Tk {item.price.toFixed(2)}
@@ -59,28 +69,28 @@ export default function SuccessPage() {
           </div>
           <div>
             <h3 className="font-semibold mb-2">Total Price:</h3>
-            <p>Tk {order?.totalPrice.toFixed(2)}</p>
+            <p>Tk {order.totalPrice.toFixed(2)}</p>
           </div>
           <div>
             <h3 className="font-semibold mb-2">Shipping Address:</h3>
             <p>
-              {order?.shippingAddress.street}, {order?.shippingAddress.city},{" "}
-              {order?.shippingAddress.state} {order?.shippingAddress.zipCode},{" "}
-              {order?.shippingAddress.country}
+              {order.shippingAddress.street}, {order.shippingAddress.city},{" "}
+              {order.shippingAddress.state} {order.shippingAddress.zipCode},{" "}
+              {order.shippingAddress.country}
             </p>
           </div>
           <div>
             <h3 className="font-semibold mb-2">Order Status:</h3>
-            <Badge variant="outline">{order?.status}</Badge>
+            <Badge variant="outline">{order.status || "Pending"}</Badge>
           </div>
           <div>
             <h3 className="font-semibold mb-2">Payment Status:</h3>
             <Badge
               variant={
-                order?.paymentStatus === "paid" ? "secondary" : "destructive"
+                order.paymentStatus === "paid" ? "secondary" : "destructive"
               }
             >
-              {order?.paymentStatus}
+              {order.paymentStatus || "Unpaid"}
             </Badge>
           </div>
         </CardContent>
@@ -91,5 +101,13 @@ export default function SuccessPage() {
         </CardFooter>
       </Card>
     </div>
+  );
+};
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SuccessPageContent />
+    </Suspense>
   );
 }

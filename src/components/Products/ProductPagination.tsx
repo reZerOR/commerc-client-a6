@@ -9,8 +9,8 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
-const ProductPagination = ({ total }: { total: number }) => {
+import { Suspense, useCallback } from "react";
+const ProductPaginationContent = ({ total }: { total: number }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = Number(searchParams.get("page")) || 1;
@@ -75,4 +75,10 @@ const ProductPagination = ({ total }: { total: number }) => {
   );
 };
 
-export default ProductPagination;
+export default function ProductPagination({ total }: { total: number }) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProductPaginationContent total={total} />
+    </Suspense>
+  );
+}

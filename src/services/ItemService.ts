@@ -27,7 +27,7 @@ export const createProduct = async (formData: FormData) => {
     });
     data.data;
   } catch (error: any) {
-    console.log(error);
+    // console.log(error);
 
     throw new Error(error.message);
   }
@@ -41,7 +41,7 @@ export const updateProduct = async (id: string, payload: FormData) => {
     });
     data.data;
   } catch (error: any) {
-    console.log(error);
+    // console.log(error);
 
     throw new Error(error.message);
   }
@@ -51,7 +51,7 @@ export const deleteProduct = async (id: string) => {
     const { data } = await axiosInstance.delete(`/item/${id}`);
     data.data;
   } catch (error: any) {
-    console.log(error);
+    // console.log(error);
 
     throw new Error(error.message);
   }

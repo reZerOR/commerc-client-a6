@@ -18,14 +18,14 @@ export type TReviewBody = {
 };
 export const getReviewByProductId = async (id: string) => {
   try {
-    console.log(id);
+    // console.log(id);
     
     const { data } = await axiosInstance.get(`/review/${id}`);
-    console.log(data.data);
+    // console.log(data.data);
 
     return data.data;
   } catch (error: any) {
-    console.log(error);
+    // console.log(error);
 
     throw new Error(error.message);
   }

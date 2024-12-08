@@ -16,7 +16,7 @@ import EditUserForm from "./EditUser";
 
 const UsersTable = () => {
   const { data: users, isLoading } = useGetUsers();
-  console.log(users);
+  // console.log(users);
   if (isLoading) {
     return <div>Loading...</div>;
   }

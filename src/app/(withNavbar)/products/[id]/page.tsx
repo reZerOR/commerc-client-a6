@@ -47,7 +47,7 @@ const ProductsId = () => {
     id as string
   );
   const { mutate: createReview, isPending } = useCreateReview(id as string);
-  console.log(reviews);
+  // // console.log(reviews);
 
   const [newReview, setNewReview] = useState({
     rating: 5,

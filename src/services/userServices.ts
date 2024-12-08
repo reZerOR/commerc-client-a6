@@ -9,7 +9,7 @@ export const getAllUsers = async () => {
     const { data } = await axiosInstance.get("/user");
     return data.data;
   } catch (error: any) {
-    console.log(error);
+    // console.log(error);
 
     throw new Error(error.message);
   }
