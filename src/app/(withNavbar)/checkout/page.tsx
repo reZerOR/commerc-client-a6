@@ -38,6 +38,7 @@ export default function CheckoutPage() {
   const { user } = useUser();
   const orderSummary = useOrderSummary();
   const [isPending, setIsPending] = useState(false);
+  
 
   const {
     register,
@@ -211,7 +212,7 @@ export default function CheckoutPage() {
             <Button
               type="submit"
               className="w-full"
-              disabled={isPending}
+              disabled={isPending || orderSummary?.items?.length! <= 0}
               onClick={handleSubmit(onSubmit)}
             >
               {isPending ? "Processing..." : "Place Order"}

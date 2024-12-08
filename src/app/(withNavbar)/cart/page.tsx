@@ -37,7 +37,7 @@ export default function CartPage() {
           Cart
         </h1>
         <Card>
-          <CardHeader>Cart summeryF</CardHeader>
+          <CardHeader>Cart summery</CardHeader>
           <CardContent>
             {items.length === 0 ? (
               <p>Your cart is empty.</p>

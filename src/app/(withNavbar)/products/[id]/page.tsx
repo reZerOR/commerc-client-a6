@@ -104,7 +104,7 @@ const ProductsId = () => {
               variant={product.quantity > 0 ? "secondary" : "destructive"}
               className="font-popins font-semibold"
             >
-              {product.quantity > 0 ? "In stock" : "Out of stock"}
+              {product.quantity > 0 ? `In stock ${product.quantity}` : "Out of stock"}
             </Badge>
           </div>
           <p className="text-gray-600 text-sm">{product.description}</p>
