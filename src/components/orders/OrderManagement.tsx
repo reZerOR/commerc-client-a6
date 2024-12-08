@@ -34,7 +34,15 @@ import { useCancelOrder, useGetAllOrders } from "@/hooks/order.hook";
 import { useEffect, useState } from "react";
 import { TOrder } from "@/services/orderService";
 import { toast } from "sonner";
-
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+} from "../ui/select";
+import { SelectValue } from "@radix-ui/react-select";
+const statusArray = ["pending", "processing", "completed", "cancelled"];
 export default function OrderManagement() {
   const [open, setIsOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
@@ -77,7 +85,22 @@ export default function OrderManagement() {
               </TableCell>
               <TableCell>{(order.user as TUser).name}</TableCell>
               <TableCell>Tk {order.totalPrice.toFixed(2)}</TableCell>
-              <TableCell>{order.status}</TableCell>
+              <TableCell>
+                <Select defaultValue={order.status}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="slecect status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {statusArray.map((item) => (
+                        <SelectItem key={item} value={item}>
+                          {item}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </TableCell>
               <TableCell>
                 <div className="flex md:flex-row flex-col items-center gap-2">
                   <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
@@ -135,12 +158,13 @@ export default function OrderManagement() {
                             {dialogOrder.items.map((item, index) => (
                               <li key={index}>
                                 {(item.item as TProduct).title} - Quantity:{" "}
-                                {item.quantity}, Price: Tk {item.price.toFixed(2)}
+                                {item.quantity}, Price: Tk{" "}
+                                {item.price.toFixed(2)}
                               </li>
                             ))}
                           </ul>
                           <p className="mt-2">
-                            <strong>Total Price:</strong> Tk {" "}
+                            <strong>Total Price:</strong> Tk{" "}
                             {dialogOrder.totalPrice.toFixed(2)}
                           </p>
                           <p>

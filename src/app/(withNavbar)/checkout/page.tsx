@@ -38,7 +38,6 @@ export default function CheckoutPage() {
   const { user } = useUser();
   const orderSummary = useOrderSummary();
   const [isPending, setIsPending] = useState(false);
-  
 
   const {
     register,
@@ -64,26 +63,29 @@ export default function CheckoutPage() {
       })),
     };
     try {
-      const result = await fetch("http://localhost:5000/api/v1/order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization:
-            document.cookie
-              .split("; ")
-              .find((row) => row.startsWith("accessToken="))
-              ?.split("=")[1] || "",
-        },
-        credentials: "include", // Ensures cookies are sent with the request
-        body: JSON.stringify(payload),
-      });
+      const result = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_BASE_API}/order`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("accessToken="))
+                ?.split("=")[1] || "",
+          },
+          credentials: "include", // Ensures cookies are sent with the request
+          body: JSON.stringify(payload),
+        }
+      );
 
       if (!result.ok) {
         throw new Error(`Error: ${result.status} ${result.statusText}`);
       }
 
       const response: TOrderResponse = await result.json();
-      // // console.log(response);
+      console.log(response);
 
       if (response.data.result === "true") {
         // redirect(response.data.payment_url);
@@ -91,7 +93,7 @@ export default function CheckoutPage() {
       }
     } catch (error) {
       setIsPending(false);
-      // // console.log(error);
+      console.log(error);
     }
   };
 
