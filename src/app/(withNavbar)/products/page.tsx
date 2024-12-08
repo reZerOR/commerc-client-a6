@@ -1,3 +1,4 @@
+import NewProducts from "@/components/Products/NewProducts";
 import ProductList from "@/components/Products/ProductList";
 import Container from "@/components/shared/Container";
 import { Metadata } from "next";
