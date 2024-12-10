@@ -5,6 +5,7 @@ import {
   getUserOrderById,
   getUserOrders,
   TOrder,
+  updateUserOrder,
 } from "@/services/orderService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -46,6 +47,24 @@ export const useCancelOrder = () => {
     mutationFn: async (id: string) => await cancelOrder(id),
     onSuccess: () => {
       toast.success("Order cancelled successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["all_orders"],
+      });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+export const useUpdateOrder = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ["cancel_order"],
+    mutationFn: async ({ id, status }: { id: string; status: string }) =>
+      await updateUserOrder(id, status),
+    onSuccess: () => {
+      toast.success("Order updated successfully");
       queryClient.invalidateQueries({
         queryKey: ["all_orders"],
       });

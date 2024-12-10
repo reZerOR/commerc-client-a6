@@ -30,14 +30,14 @@ export type TOrder = {
   updatedAt?: Date;
 };
 
-export const getAllOrder = async()=>{
+export const getAllOrder = async () => {
   try {
     const { data } = await axiosInstance.get(`/order`);
     return data.data;
   } catch (error: any) {
     throw new Error(error.message);
   }
-}
+};
 
 export const createOrder = async (payload: TOrder) => {
   try {
@@ -59,6 +59,14 @@ export const getUserOrderById = async (id: string) => {
 export const cancelOrder = async (id: string) => {
   try {
     const { data } = await axiosInstance.delete(`/order/${id}`);
+    return data.data;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+export const updateUserOrder = async (id: string, status: string) => {
+  try {
+    const { data } = await axiosInstance.put(`/order/${id}`, { status });
     return data.data;
   } catch (error: any) {
     throw new Error(error.message);
