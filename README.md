@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Full-Stack E-commerce Platform
 
-## Getting Started
+A comprehensive e-commerce platform with user and admin dashboards.
 
-First, run the development server:
+## Project Description
 
+A full-stack web application that enables users to browse, purchase products, and manage orders with a robust admin interface for complete store management. Features separate dashboards for users and administrators, secure payment processing, and inventory management.
+
+## Features
+
+### User Features
+- Product browsing and searching
+- Category-based filtering
+- Shopping cart management
+- Secure checkout with payment gateway integration
+- Personal dashboard for order management
+- Order history tracking
+
+### Admin Features
+- User management (CRUD operations)
+- Product management system
+- Category management
+- Order oversight
+- Payment tracking
+- Inventory management
+
+## Technology Stack
+
+### Frontend
+- Next.js
+- TypeScript
+- Tailwind CSS
+- React Query
+- ShadcnUI
+- justand
+
+### Backend
+- Node.js/Express.js
+- MongoDB
+- JWT Authentication
+- TypeScript
+- Mongoose ODM
+
+## Installation Guidelines
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm/yarn
+- MongoDB (local or Atlas URI)
+
+### Installation Steps
+
+1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone [repository-url]
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies and run project
+```bash
+# Frontend dependencies
+cd [repository]
+npm install --force
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Set up environment variables:
+Create `.env` files in both frontend and backend directories:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Frontend `.env`:
+```env
+SERVER_BASE_API=http://localhost:5000
+NEXT_PUBLIC_SERVER_BASE_API=http://localhost:5000
+```
 
-## Learn More
+4. Access the application at `http://localhost:3000`
 
-To learn more about Next.js, take a look at the following resources:
+### For server check this repository https://github.com/reZerOR/ecommerce-server-a6.git
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Core Pages
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### User Interface
+- Landing Page with product showcase
+- Product listing/details pages
+- Shopping cart
+- Checkout system
+- User dashboard
+- Order tracking
+- Authentication pages
 
-## Deploy on Vercel
+### Admin Interface
+- Admin dashboard
+- User management
+- Product management
+- Category management
+- Order management
+- Payment tracking
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Additional Features
+- Responsive design
+- Custom error pages
+- Scroll to top functionality
+- Pagination
+- Toast notifications for error handling
+- Image upload capability
+- Real-time inventory tracking
+- Search functionality
+- Filter and sort capabilities
